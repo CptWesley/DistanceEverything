@@ -37,6 +37,21 @@ namespace DistanceEverything
             T[] s = sequence1.ToArray();
             T[] t = sequence2.ToArray();
 
+            if (s is null && t is null)
+            {
+                return 0;
+            }
+
+            if (s is null)
+            {
+                return t.Length;
+            }
+
+            if (t is null)
+            {
+                return s.Length;
+            }
+
             if (s.Length < t.Length)
             {
                 T[] swap = t;
@@ -61,9 +76,9 @@ namespace DistanceEverything
             }
 
             int suffix = 0;
-            for (int i = t.Length - 1; i >= 0; --i)
+            for (int i = 0; i < t.Length; ++i)
             {
-                if (!t[i]!.Equals(s[i]))
+                if (!t[t.Length - 1 - i]!.Equals(s[s.Length - 1 - i]))
                 {
                     break;
                 }
@@ -76,20 +91,28 @@ namespace DistanceEverything
                 return s.Length;
             }
 
-            int[] costs = new int[t.Length - prefix - suffix];
+            int padding = prefix + suffix;
+            int tLength = t.Length - padding;
+            int sLength = s.Length - padding;
+            if (tLength == 0)
+            {
+                return s.Length - padding;
+            }
+
+            int[] costs = new int[tLength];
 
             for (int i = 0; i < costs.Length;)
             {
                 costs[i] = ++i;
             }
 
-            for (int i = 0; i < s.Length - prefix - suffix; ++i)
+            for (int i = 0; i < sLength; ++i)
             {
                 int cost = i;
                 int previousCost = i;
                 T value = s[prefix + i];
 
-                for (int j = 0; j < t.Length - prefix - suffix; ++j)
+                for (int j = 0; j < tLength; ++j)
                 {
                     int currentCost = cost;
                     cost = costs[j];
@@ -114,7 +137,7 @@ namespace DistanceEverything
                 }
             }
 
-            return costs[costs.Length - 1];
+            return costs[tLength - 1];
         }
 
         /// <summary>
@@ -164,9 +187,9 @@ namespace DistanceEverything
             }
 
             int suffix = 0;
-            for (int i = t.Length - 1; i >= 0; --i)
+            for (int i = 0; i < t.Length; ++i)
             {
-                if (t[i] != s[i])
+                if (t[t.Length - 1 - i] != s[s.Length - 1 - i])
                 {
                     break;
                 }
@@ -179,20 +202,28 @@ namespace DistanceEverything
                 return s.Length;
             }
 
-            int[] costs = new int[t.Length - prefix - suffix];
+            int padding = prefix + suffix;
+            int tLength = t.Length - padding;
+            int sLength = s.Length - padding;
+            if (tLength == 0)
+            {
+                return s.Length - padding;
+            }
+
+            int[] costs = new int[tLength];
 
             for (int i = 0; i < costs.Length;)
             {
                 costs[i] = ++i;
             }
 
-            for (int i = 0; i < s.Length - prefix - suffix; ++i)
+            for (int i = 0; i < sLength; ++i)
             {
                 int cost = i;
                 int previousCost = i;
                 char value = s[prefix + i];
 
-                for (int j = 0; j < t.Length - prefix - suffix; ++j)
+                for (int j = 0; j < tLength; ++j)
                 {
                     int currentCost = cost;
                     cost = costs[j];
@@ -217,7 +248,7 @@ namespace DistanceEverything
                 }
             }
 
-            return costs[costs.Length - 1];
+            return costs[tLength - 1];
         }
     }
 }
